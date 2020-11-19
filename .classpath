@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/org.restlet.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/org.restlet.jar" sourcepath="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/org.restlet.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/jackson-dataformat-yaml-2.12.0-rc2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/jackson-datatype-jsr310-2.12.0-rc2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/jackson-databind-2.12.0-rc2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Alexandre/Desktop/WS_BRANCOLINI_PARES/ST2ISG-project/lib/jackson-core-2.12.0-rc2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

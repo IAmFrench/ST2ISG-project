@@ -15,6 +15,6 @@ public class GetAvailableRooms extends ServerResource {
 	
 	private void getHotels(){
 		
-		HotelRepository.getInstance().getHotel();
+		HotelRepository.getInstance().getHotels();
 	}
 }
