@@ -1,0 +1,17 @@
+hotels :
+  Formula 1:
+    totalRooms: 1 # computed
+    availableRooms: 1 # computed
+    rooms:
+      101:
+        reservation: null
+  Econo Lodge:
+    totalRooms: 2 # computed
+    availableRooms: 1 # computed
+    rooms:
+      101:
+        reservation: null
+      102:
+        reservation: 25
+      103:
+        reservation: 26
