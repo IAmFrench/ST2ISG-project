@@ -1,0 +1,11 @@
+{
+  "name": "ST2ISG-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/IAmFrench/ST2ISG-project.git",
+  "author": "Alexandre Parès <IAmFrench@users.noreply.github.com>, Alexandre Brancolini <60871005+Zenibaa57@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "soap": "^0.35.0"
+  }
+}
