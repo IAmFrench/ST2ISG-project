@@ -4,8 +4,5 @@ class hotel {
     this.name = name;
     this.rooms = rooms;
   }
-  size() {
-    return this.rooms.length;
-  }
 }
 exports.hotel = hotel;

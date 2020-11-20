@@ -1,40 +1,8 @@
-const yaml = require('js-yaml')
-const fs   = require('fs')
-const moment = require('moment')
-const { hotel } = require("./hotel")
-const { reservation } = require("./reservation")
+const { reservationSystem } = require("./reservationSystem")
 
-// 1. Load the database from the file
-const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'))
-const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'))
+let RSI = new reservationSystem()
 
-let hotelsList = []
-const hotelsListKeys = Object.keys(hotelsObj.hotels)
-for (const hotelName of hotelsListKeys) {
-  hotelsList.push(new hotel(hotelName, hotelsObj.hotels[hotelName].rooms))
-}
-
-
-let reservationsList = []
-const reservationsListKeys = Object.keys(reservationsObj.reservations)
-for (const reservationId of reservationsListKeys) {
-  const startDate = moment(reservationsObj.reservations[reservationId].startDate)
-  const startDateString = startDate.format('YYYY-MM-DD')
-  const endDate = moment(reservationsObj.reservations[reservationId].endDate)
-  const duration = moment.duration(endDate.diff(startDate)).as('days')
-  const hotelName = reservationsObj.reservations[reservationId].hotel
-  const rooms = reservationsObj.reservations[reservationId].rooms
-  
-  reservationsList.push(new reservation(reservationId, startDateString, duration, hotelName, rooms))
-}
-
-console.log(hotelsList)
-console.log(reservationsList)
-
-// 3. Create methods
-// 3.1. Get hotel list, including free rooms for a specific day and period
-// 3.2. Make a reservation
-
+RSI.search("2020-11-20", 2, 2)
 
 
 // 4. Create test scenarios
