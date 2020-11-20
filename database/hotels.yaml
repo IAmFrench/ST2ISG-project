@@ -1,17 +1,12 @@
-hotels :
+%YAML 1.2
+---
+# This file contain all hotels
+hotels:
   Formula 1:
-    totalRooms: 1 # computed
-    availableRooms: 1 # computed
     rooms:
-      101:
-        reservation: null
+      - 101
   Econo Lodge:
-    totalRooms: 2 # computed
-    availableRooms: 1 # computed
     rooms:
-      101:
-        reservation: null
-      102:
-        reservation: 25
-      103:
-        reservation: 26
+      - 101
+      - 102
+      - 103

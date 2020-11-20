@@ -1,0 +1,16 @@
+%YAML 1.2
+---
+# This file contain all reservations
+reservations:
+  25:
+    startDate: "2020-11-18"
+    endDate: "2020-11-30"
+    hotel: "Econo Lodge"
+    rooms:
+      - 102
+  26:
+    startDate: "2020-11-20"
+    endDate: "2020-11-29"
+    hotel: "Econo Lodge"
+    rooms:
+      - 103
