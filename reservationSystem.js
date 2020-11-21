@@ -62,10 +62,12 @@ class reservationSystem {
     for (let index = 0; index < duration; index++) {
       dates.push(moment(startDate).add(index, 'days').format('YYYY-MM-DD'))      
     }
+
+    let roomsToBeDeleted = []
     resultHotels.forEach((hotel, indexH) => {
       console.log('Cheking hotel ' + hotel.name)
       const hotelRoomsListKeys = Object.keys(hotel.rooms)
-      let roomsToBeDeleted = []
+      let roomsToBeDeletedObj = {hotelName: hotel.name, hotelIndex: indexH, rooms: []}
       for (const roomNumber of hotelRoomsListKeys) {
         console.log('[' + hotel.name + '] Cheking room ' + roomNumber)
         if (hotel.rooms[roomNumber] != null) {
@@ -79,26 +81,23 @@ class reservationSystem {
             if (roomDatesFormatted.includes(date)) {
               if (!roomsToBeDeleted.includes(roomNumber)) {
                 console.log('THIS ROOM (' + roomNumber + ') IS ALREADY BOOKED FOR THIS DATE')
-                roomsToBeDeleted.push(roomNumber)
+                roomsToBeDeletedObj.rooms.push(roomNumber)
               }
             }
           })
         }
       }
-      // Delete room from current hotel
-      console.log(this)
-      console.log(resultHotels)
-      console.log(this.hotels[1] === resultHotels)
-      roomsToBeDeleted.forEach((roomNumber, roomNumberIndex) => {
-        console.log('deleting room No. ' + roomNumber + ' from hotel ' + resultHotels[indexH].name)
-        delete hotel.rooms[roomNumber]
-        
-        // Do the same using the loadash
-        //hotel.rooms = _.omit(hotel.rooms, [roomNumber])
-      })
-      console.log(this)
+
+      roomsToBeDeletedObj.rooms = [...new Set(roomsToBeDeletedObj.rooms)] // Remove duplicates
+      roomsToBeDeleted.push(roomsToBeDeletedObj)
     })
-    
+    // We can now delete unavailable rooms from our resultHotels variable
+    roomsToBeDeleted.forEach((dHotel) => {
+      // The following line is affectic the this.hotel object
+      resultHotels[dHotel.hotelIndex].rooms = _.omit(resultHotels[dHotel.hotelIndex].rooms, dHotel.rooms)
+    })
+
+
     // We now check if the hotel has the number of requested rooms available
     // If not we delete the hotel from the result list
     resultHotels.forEach((hotel, indexH) => {
@@ -162,7 +161,6 @@ class reservationSystem {
         }
       }
     }
-    console.log(selectedRooms)
 
 
     // We update "in-memory" rooms booking for selected days
