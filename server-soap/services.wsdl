@@ -6,23 +6,49 @@
    xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
 
    <message name = "MyFunctionRequest">
-      <part name = "testParam" type = "xsd:string"/>
+      <part name = "name" type = "xsd:string"/>
    </message>
    <message name = "MyFunctionResponse">
       <part name = "status" type = "xsd:string"/>
    </message>
+   
+   <message name = "filterRequest">
+      <part name = "startDate" type = "xsd:string"/>
+      <part name = "duration" type = "xsd:string"/>
+      <part name = "numberOfRooms" type = "xsd:string"/>
+   </message>
+   <message name = "filterResponse">
+      <part name = "hotels" type = "xsd:string"/>
+   </message>
+   
    <portType name = "MyPort">
       <operation name = "MyFunction">
          <input message = "tns:MyFunctionRequest"/>
          <output message = "tns:MyFunctionResponse"/>
       </operation>
+      <operation name = "filter">
+         <input message = "tns:filterRequest"/>
+         <output message = "tns:filterResponse"/>
+      </operation>
    </portType>
+
+
+
 
    <binding name = "MyFunction_Binding" type = "tns:MyPort">
       <soap:binding style = "rpc"
          transport = "http://schemas.xmlsoap.org/soap/http"/>
       <operation name = "MyFunction">
          <soap:operation soapAction = "MyFunction"/>
+         <input>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+         </input>
+         <output>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+         </output>
+      </operation>
+      <operation name = "filter">
+         <soap:operation soapAction = "filter"/>
          <input>
             <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
          </input>

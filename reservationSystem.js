@@ -1,6 +1,7 @@
 const yaml = require('js-yaml')
 const fs = require('fs')
 const moment = require('moment')
+var _ = require('lodash')
 const { hotel } = require("./hotel")
 const { reservation } = require("./reservation")
 
@@ -34,9 +35,10 @@ class reservationSystem {
   }
   search(startDate, duration = 1, roomsRequired = 1) {
     // Return an hotel name with available rooms for the asked period
-    let resulthotels = this.hotels
+    let resultHotels = [...this.hotels] // COPY THE OBJECT, don't pass a reference
+
     // Filter per hotel size
-    resulthotels.forEach((hotel, indexH) => {
+    resultHotels.forEach((hotel, indexH) => {
       // Check if number of rooms required is equal of inf to the number of rooms
       const hotelRoomsListKeys = Object.keys(hotel.rooms)
       console.log("Number of rooms in this hotel " + hotelRoomsListKeys.length)
@@ -45,11 +47,11 @@ class reservationSystem {
         console.log('The hotel ' + hotel.name 
         + ' have less room than required for this reservation (' 
         + hotelRoomsListKeys.length + ', required ' + roomsRequired + ')')
-        delete resulthotels[indexH]
+        delete resultHotels[indexH]
       }
     })
     // Reconstruct the array (trim undefinded)
-    resulthotels = resulthotels.filter(function (el) {
+    resultHotels = resultHotels.filter(function (el) {
       return el != null
     })
 
@@ -60,14 +62,14 @@ class reservationSystem {
     for (let index = 0; index < duration; index++) {
       dates.push(moment(startDate).add(index, 'days').format('YYYY-MM-DD'))      
     }
-    resulthotels.forEach((hotel, indexH) => {
-      console.log('Cheking hotel ' + resulthotels[indexH].name)
-      const hotelRoomsListKeys = Object.keys(resulthotels[indexH].rooms)
+    resultHotels.forEach((hotel, indexH) => {
+      console.log('Cheking hotel ' + hotel.name)
+      const hotelRoomsListKeys = Object.keys(hotel.rooms)
       let roomsToBeDeleted = []
       for (const roomNumber of hotelRoomsListKeys) {
-        console.log('[' + resulthotels[indexH].name + '] Cheking room ' + roomNumber)
-        if (resulthotels[indexH].rooms[roomNumber] != null) {
-          const roomDatesKeys = Object.keys(resulthotels[indexH].rooms[roomNumber].reservations)
+        console.log('[' + hotel.name + '] Cheking room ' + roomNumber)
+        if (hotel.rooms[roomNumber] != null) {
+          const roomDatesKeys = Object.keys(hotel.rooms[roomNumber].reservations)
           let roomDatesFormatted = []
           for (const reservationDate of roomDatesKeys) {
             // reservationDate is a string, so we first must convert it to a date obj.
@@ -84,31 +86,95 @@ class reservationSystem {
         }
       }
       // Delete room from current hotel
-      roomsToBeDeleted.forEach(roomNumber => {
-        console.log('deleting room No. ' + roomNumber + ' from hotel ' + resulthotels[indexH].name)
-        delete resulthotels[indexH].rooms[roomNumber]
+      console.log(this)
+      console.log(resultHotels)
+      console.log(this.hotels[1] === resultHotels)
+      roomsToBeDeleted.forEach((roomNumber, roomNumberIndex) => {
+        console.log('deleting room No. ' + roomNumber + ' from hotel ' + resultHotels[indexH].name)
+        delete hotel.rooms[roomNumber]
+        
+        // Do the same using the loadash
+        //hotel.rooms = _.omit(hotel.rooms, [roomNumber])
       })
+      console.log(this)
     })
     // We now check if the hotel has the number of requested rooms available
     // If not we delete the hotel from the result list
-    resulthotels.forEach((hotel, indexH) => {
-      const hotelRoomsListKeys = Object.keys(resulthotels[indexH].rooms)
+    resultHotels.forEach((hotel, indexH) => {
+      const hotelRoomsListKeys = Object.keys(resultHotels[indexH].rooms)
       if (hotelRoomsListKeys.length < roomsRequired) {
         // This hotel doesn't have enough rooms for the reservation
-        delete resulthotels[indexH]
+        delete resultHotels[indexH]
       }      
     })
 
     // Reconstruct the array (trim undefinded)
-    resulthotels = resulthotels.filter(function (el) {
+    resultHotels = resultHotels.filter(function (el) {
       return el != null
     })
 
     // Build the response, return true/false, if true add the list of potentia hotels + rooms 
-    if (resulthotels.length == 0) {
-      return false
+    if (resultHotels.length == 0) {
+      return {
+        code: "failure",
+        data: "hotel not found"
+      }
     }
-    return resulthotels
+    return {
+      code: "success",
+      data: resultHotels
+    }
+  }
+
+
+  book(hotelName, startDate, duration = 1, roomsRequired = 1, selectedRooms = []) {
+    // We generate booking reservation dates
+    let dates = []
+    for (let index = 0; index < duration; index++) {
+      dates.push(moment(startDate).add(index, 'days').format('YYYY-MM-DD'))     
+    }
+
+    if (selectedRooms.length == 0) {
+      let searchResult = this.search(startDate, duration, roomsRequired)
+      if (searchResult.code == 'failure') {
+        // No hotel match selected criterias
+        return searchResult // aka the same response, failure
+      }
+
+      // We must check that the hotel name is in the search results
+      searchResult.data.forEach((hotel, hotelKey) => {
+        console.log(hotel.name, hotelKey)
+        if (hotel.name == hotelName) {
+          // This is the desired hotel
+          const hotelRoomsListKeys = Object.keys(hotel.rooms)
+          for (let index = 0; index < roomsRequired; index++) {
+            let roomNumber = hotelRoomsListKeys[index]
+            selectedRooms.push(roomNumber)
+          }
+        }
+      })
+      if (selectedRooms.length == 0) {
+        // That means the hotelName wasn't found in the searchResult
+        return {
+          code: "failure",
+          data: "no hotel match your booking criterias"
+        }
+      }
+    }
+    console.log(selectedRooms)
+
+
+    // We update "in-memory" rooms booking for selected days
+    this.hotels.forEach((hotel, hotelKey) => {
+      if (hotel.name == hotelName) {
+        selectedRooms.forEach(roomNumber => {
+          // We add a reservation number to the room number by a selected date
+          //hotel.rooms[roomNumber]
+        })
+      }
+    })
+    // We update "in-hard" (in file) rooms booking update for selected days
+
   }
 }
 exports.reservationSystem = reservationSystem;
