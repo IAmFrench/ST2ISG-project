@@ -2,8 +2,7 @@ const { reservationSystem } = require("./reservationSystem")
 
 let RSI = new reservationSystem()
 
-RSI.search("2020-11-20", 2, 2)
-
+let results = RSI.search("2020-11-20", 2, 2)
 
 // 4. Create test scenarios
 // 4.1 Make a search request

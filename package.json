@@ -6,6 +6,7 @@
   "author": "Alexandre Parès <IAmFrench@users.noreply.github.com>, Alexandre Brancolini <60871005+Zenibaa57@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "js-yaml": "^3.14.0",
     "moment": "^2.29.1",
