@@ -6,7 +6,7 @@ let RSI = new reservationSystem()
 //let searchResult = RSI.search("2020-11-20", 2, 2)
 //console.log(searchResult)
 
-let bookingResult = RSI.book("Econo Lodge", "2020-11-20", 2, 2)
+let bookingResult = RSI.book("Econo Lodge", "2020-11-20", 2, 3)
 console.log(bookingResult)
 
 

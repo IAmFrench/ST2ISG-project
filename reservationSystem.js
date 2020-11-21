@@ -10,11 +10,11 @@ const { reservation } = require("./reservation")
 // 3.2. Make a reservation
 class reservationSystem {
   constructor() {
-    this.hotels = [];
-    this.reservations = [];
+    this.hotels = []
+    this.reservations = []
 
-    const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'));
-    const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'));
+    const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'))
+    const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'))
 
     const hotelsListKeys = Object.keys(hotelsObj.hotels)
     for (const hotelName of hotelsListKeys) {
@@ -38,6 +38,7 @@ class reservationSystem {
     let resultHotels = [...this.hotels] // COPY THE OBJECT, don't pass a reference
 
     // Filter per hotel size
+    let indexesTobeDeleted = []
     resultHotels.forEach((hotel, indexH) => {
       // Check if number of rooms required is equal of inf to the number of rooms
       const hotelRoomsListKeys = Object.keys(hotel.rooms)
@@ -47,13 +48,12 @@ class reservationSystem {
         console.log('The hotel ' + hotel.name 
         + ' have less room than required for this reservation (' 
         + hotelRoomsListKeys.length + ', required ' + roomsRequired + ')')
-        delete resultHotels[indexH]
+        indexesTobeDeleted.push(indexH)
       }
     })
-    // Reconstruct the array (trim undefinded)
-    resultHotels = resultHotels.filter(function (el) {
-      return el != null
-    })
+    if (indexesTobeDeleted) {
+      _.pullAt(resultHotels, indexesTobeDeleted)
+    }
 
 
     // Search by date from hotels rooms for eachroom if it's available at the required dates
@@ -98,6 +98,7 @@ class reservationSystem {
       })
       console.log(this)
     })
+    
     // We now check if the hotel has the number of requested rooms available
     // If not we delete the hotel from the result list
     resultHotels.forEach((hotel, indexH) => {
