@@ -4,13 +4,14 @@
 reservations:
   25:
     startDate: "2020-11-18"
-    endDate: "2020-11-30"
+    endDate: "2020-11-24"
     hotel: "Econo Lodge"
     rooms:
       - 102
   26:
     startDate: "2020-11-20"
-    endDate: "2020-11-29"
+    endDate: "2020-11-24"
     hotel: "Econo Lodge"
     rooms:
+      - 101
       - 103
