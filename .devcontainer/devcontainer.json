@@ -8,12 +8,14 @@
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
-		"terminal.integrated.shell.linux": "/bin/bash"
+    "terminal.integrated.shell.linux": "/bin/bash",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2
 	},
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"dbaeumer.vscode-eslint"
+    "dbaeumer.vscode-eslint",
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
