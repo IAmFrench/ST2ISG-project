@@ -36,11 +36,23 @@ class reservationSystem {
   }
   search(startDate, duration = 1, roomsRequired = 1) {
     // Return an hotel name with available rooms for the asked period
-    let resultHotels = [...this.hotels] // COPY THE OBJECT, don't pass a reference
+    //let resultHotels = [...this.hotels] // COPY THE OBJECT, don't pass a reference
+    
+    // resultHotels.forEach((hotel, indexH) => {
+    //   resultHotels[indexH].rooms = [...this.hotels[indexH].rooms]
+    // })
+    let resultHotels = []
+    resultHotels = JSON.parse(JSON.stringify(this.hotels))
+    console.log('this', this.hotels)
+    console.log(resultHotels)
+    console.log('coucou')
+
+
 
     // Filter per hotel size
     let indexesTobeDeleted = []
     resultHotels.forEach((hotel, indexH) => {
+
       // Check if number of rooms required is equal of inf to the number of rooms
       const hotelRoomsListKeys = Object.keys(hotel.rooms)
       console.log("Number of rooms in this hotel " + hotelRoomsListKeys.length)
@@ -68,12 +80,14 @@ class reservationSystem {
     console.log('Dates requested for this booking: ', dates)
 
     let roomsToBeDeleted = []
+
     resultHotels.forEach((hotel, indexH) => {
       console.log('Cheking hotel ' + hotel.name + ' for availables rooms')
 
       let roomsToBeDeletedObj = {hotelName: hotel.name, hotelIndex: indexH, rooms: []}
+      
+      
       hotel.rooms.forEach((roomObj, roomIndex) => {
-
         console.log('[' + hotel.name + '] Cheking reservations for room ' + roomObj.roomId)
 
         if (roomObj.hasOwnProperty('reservations')) {
@@ -96,6 +110,8 @@ class reservationSystem {
       // We can now  add rooms for this hotel in the global var. of rooms to be deleted fom this search
       roomsToBeDeleted.push(roomsToBeDeletedObj)
     })
+
+    
     // We can now delete unavailable rooms from our resultHotels variable
     roomsToBeDeleted.forEach((dHotel) => {
       // The following line is affectic the this.hotel object
@@ -111,11 +127,17 @@ class reservationSystem {
           }
         })
       })
+
+      console.log(this)
       if (roomIndexToBeDeleted.length) {
         console.log('Removing unavaiblable room for hotel ' + dHotel.hotelName)
+        // The following line will affect this.hotels
         _.pullAt(resultHotels[dHotel.hotelIndex].rooms, roomIndexToBeDeleted) // Remove rooms by index
+        
       }
     })
+
+    console.log(this)
 
 
     // We now check if the hotel, with unavailable romms remove has still

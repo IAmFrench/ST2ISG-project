@@ -1,6 +1,6 @@
 %YAML 1.2
 ---
-# This file contain all hotels
+# This file contain all hotels available for your reservation system
 hotels:
   Formula 1:
     rooms:

@@ -8,6 +8,9 @@ class hotel {
     this.rooms = this.parseRooms(rooms)
   }
   parseRooms(rooms) {
+    /**
+     * Use to parse a rooms from an yaml import (using yaml.safeLoad)
+     */
     let parsedRooms = []
     const roomsKeys = Object.keys(rooms)
     for (const roomId of roomsKeys) {
