@@ -7,16 +7,16 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch REST Client",
+      "name": "Launch REST Server",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/client-rest/index.js"
+      "program": "${workspaceFolder}/server-rest/index.js"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch SOAP server",
+      "name": "Launch SOAP Server",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -25,11 +25,11 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch REST server",
+      "name": "Launch REST Client",
       "skipFiles": [
         "<node_internals>/**"
       ],
-      "program": "${workspaceFolder}/server-rest/index.js"
+      "program": "${workspaceFolder}/client-rest/index.js"
     }
   ]
 }

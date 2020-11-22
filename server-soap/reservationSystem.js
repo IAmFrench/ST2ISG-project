@@ -14,7 +14,6 @@ class reservationSystem {
     this.reservations = []
 
     const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'))
-    //console.log(hotelsObj)
     const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'))
 
     const hotelsListKeys = Object.keys(hotelsObj.hotels)
@@ -112,8 +111,10 @@ class reservationSystem {
           }
         })
       })
-      console.log('Removing unavaiblable room for hotel ' + dHotel.hotelName)
-      _.pullAt(resultHotels[dHotel.hotelIndex].rooms, roomIndexToBeDeleted) // Remove rooms by index
+      if (roomIndexToBeDeleted.length) {
+        console.log('Removing unavaiblable room for hotel ' + dHotel.hotelName)
+        _.pullAt(resultHotels[dHotel.hotelIndex].rooms, roomIndexToBeDeleted) // Remove rooms by index
+      }
     })
 
 
