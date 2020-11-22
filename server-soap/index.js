@@ -12,7 +12,17 @@ let myService = {
       },
       filter: function(args) {
         return {
-          hotels: "OK from filter function"
+          query: {
+            startDate: args.startDate,
+            duration: args.numberOfRooms,
+            numberOfRooms: args.numberOfRooms
+          },
+          code: "hotel(s) found",
+          data: [
+            {
+              name: "Formula 1"
+            }
+          ]          
         };
       }
     }

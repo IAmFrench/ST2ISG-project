@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>Client Rest (static)</title>
+</head>
+<body>
+  <h1>Client REST (static)</h1>
+  
+  <section>
+    <h2>Search for available hotels</h2>
+    <form id="filter-form">            
+      <label for="startDate"> Start Date: </label>
+      <input type="datetime" name="startDate" id="startDate">
+      <label for="duration">Duration:</label>
+      <input type="number" name="duration" id="duration">
+      <label for="numberOfRooms">Number of Rooms:</label>
+      <input type="number" name="numberOfRooms" id="numberOfRooms">
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      let form = document.getElementById('filter-form')
+      form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const target = "http://localhost:3000/filter"
+        axios.get(target, { params: { 
+          startDate: document.getElementById('startDate').value,
+          duration: document.getElementById('duration').value || 1,
+          numberOfRooms: document.getElementById('numberOfRooms').value || 1
+        } })
+        .then(function (response) {
+          console.log(response)
+          document.getElementById('filter-response').textContent = JSON.stringify(response.data, null, 2)
+
+        })
+      })
+    </script>
+    <code id="filter-response">
+      // REST Filter response <br/>
+      // Please use the form above to sent the query and get a response
+    </code>
+  </section>
+  
+</body>
+</html>
