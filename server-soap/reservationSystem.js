@@ -13,8 +13,8 @@ class reservationSystem {
     this.hotels = []
     this.reservations = []
 
-    const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'))
-    const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'))
+    const hotelsObj = yaml.safeLoad(fs.readFileSync('../database/hotels.yaml', 'utf8'))
+    const reservationsObj = yaml.safeLoad(fs.readFileSync('../database/reservations.yaml', 'utf8'))
 
     const hotelsListKeys = Object.keys(hotelsObj.hotels)
     for (const hotelName of hotelsListKeys) {

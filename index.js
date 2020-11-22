@@ -1,4 +1,4 @@
-const { reservationSystem } = require("./reservationSystem")
+const { reservationSystem } = require("./server-soap/reservationSystem")
 
 let RSI = new reservationSystem()
 

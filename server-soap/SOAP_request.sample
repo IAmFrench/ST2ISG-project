@@ -1,0 +1,10 @@
+<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:examples:MyService">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:filter soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+         <startDate>2020-11-20</startDate>
+         <duration>1</duration>
+         <numberOfRooms>2</numberOfRooms>
+      </urn:filter>
+   </soapenv:Body>
+</soapenv:Envelope>

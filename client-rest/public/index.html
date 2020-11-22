@@ -13,16 +13,16 @@
     <h2>Search for available hotels</h2>
     <form id="filter-form">            
       <label for="startDate"> Start Date: </label>
-      <input type="datetime" name="startDate" id="startDate">
+      <input type="datetime" name="startDate" id="startDate" value="2020-11-20">
       <label for="duration">Duration:</label>
-      <input type="number" name="duration" id="duration">
+      <input type="number" name="duration" id="duration" aria-valuemin="1" value="1">
       <label for="numberOfRooms">Number of Rooms:</label>
-      <input type="number" name="numberOfRooms" id="numberOfRooms">
+      <input type="number" name="numberOfRooms" id="numberOfRooms" aria-valuemin="1" value="1">
       <button type="submit">Submit</button>
     </form>
     <script>
-      let form = document.getElementById('filter-form')
-      form.addEventListener('submit', (event) => {
+      let formFilter = document.getElementById('filter-form')
+      formFilter.addEventListener('submit', (event) => {
         event.preventDefault()
         const target = "http://localhost:3000/filter"
         axios.get(target, { params: { 
@@ -37,10 +37,50 @@
         })
       })
     </script>
-    <code id="filter-response">
-      // REST Filter response <br/>
-      // Please use the form above to sent the query and get a response
-    </code>
+    <pre>
+      <code id="filter-response">
+        // REST Filter response
+        // Please use the form above to sent the query and get a response
+      </code>
+    </pre>    
+  </section>
+
+  <section>
+    <h2>Book a room</h2>
+    <form id="book-form">
+      <label for="book-hotelName"> Hotel name: </label>
+      <input type="datetime" name="hotelName" id="book-hotelName" value="Formula 1">
+      <label for="book-startDate"> Start Date: </label>
+      <input type="datetime" name="startDate" id="book-startDate" value="2020-11-20">
+      <label for="book-duration">Duration:</label>
+      <input type="number" name="duration" id="book-duration" aria-valuemin="1" value="1">
+      <label for="book-numberOfRooms">Number of Rooms:</label>
+      <input type="number" name="numberOfRooms" id="book-numberOfRooms" aria-valuemin="1" value="1">
+      <button type="submit">Submit</button>
+    </form>
+    <script>
+      let formBook = document.getElementById('book-form')
+      formBook.addEventListener('submit', (event) => {
+        event.preventDefault()
+        const target = "http://localhost:3000/book"
+        axios.get(target, { params: { 
+          hotelName: document.getElementById('book-hotelName').value,
+          startDate: document.getElementById('book-startDate').value,
+          duration: document.getElementById('book-duration').value || 1,
+          numberOfRooms: document.getElementById('book-numberOfRooms').value || 1
+        } })
+        .then(function (response) {
+          console.log(response)
+          document.getElementById('book-response').textContent = JSON.stringify(response.data, null, 2)
+        })
+      })
+    </script>
+    <pre>
+      <code id="book-response">
+        // REST Book response
+        // Please use the form above to sent the query and get a response
+      </code>
+    </pre>    
   </section>
   
 </body>

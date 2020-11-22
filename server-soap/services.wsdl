@@ -14,11 +14,13 @@
    
    <message name = "filterRequest">
       <part name = "startDate" type = "xsd:string"/>
-      <part name = "duration" type = "xsd:string"/>
-      <part name = "numberOfRooms" type = "xsd:string"/>
+      <part name = "duration" type = "xsd:int"/>
+      <part name = "numberOfRooms" type = "xsd:int"/>
    </message>
    <message name = "filterResponse">
-      <part name = "hotels" type = "xsd:string"/>
+      <part name = "code" type = "xsd:string"/>
+      <part name = "data"/>
+      <part name = "query"/>
    </message>
    
    <portType name = "MyPort">
