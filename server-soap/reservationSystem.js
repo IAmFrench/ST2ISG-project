@@ -13,15 +13,17 @@ class reservationSystem {
     this.hotels = []
     this.reservations = []
 
-    const hotelsObj = yaml.safeLoad(fs.readFileSync('../database/hotels.yaml', 'utf8'))
-    const reservationsObj = yaml.safeLoad(fs.readFileSync('../database/reservations.yaml', 'utf8'))
+    const hotelsObj = yaml.safeLoad(fs.readFileSync('./database/hotels.yaml', 'utf8'))
+    //console.log(hotelsObj)
+    const reservationsObj = yaml.safeLoad(fs.readFileSync('./database/reservations.yaml', 'utf8'))
 
     const hotelsListKeys = Object.keys(hotelsObj.hotels)
+    
     for (const hotelName of hotelsListKeys) {
       this.hotels.push(new hotel(hotelName, hotelsObj.hotels[hotelName].rooms))
     }
-
     const reservationsListKeys = Object.keys(reservationsObj.reservations)
+
     for (const reservationId of reservationsListKeys) {
       const startDate = moment(reservationsObj.reservations[reservationId].startDate)
       const startDateString = startDate.format('YYYY-MM-DD')
@@ -45,15 +47,17 @@ class reservationSystem {
       console.log("Number of rooms in this hotel " + hotelRoomsListKeys.length)
       if (hotelRoomsListKeys.length < roomsRequired) {
         // We remove this particular hotel from the list of return hotels
-        console.log('The hotel ' + hotel.name 
-        + ' have less room than required for this reservation (' 
-        + hotelRoomsListKeys.length + ', required ' + roomsRequired + ')')
+        console.log(`The hotel ${hotel.name} have less room than required for this reservation (${hotelRoomsListKeys.length}, required ${roomsRequired}) skipping...`)
         indexesTobeDeleted.push(indexH)
       }
     })
-    if (indexesTobeDeleted) {
+    console.log("indexesTobeDeleted", indexesTobeDeleted)
+    if (indexesTobeDeleted.length > 0) {
+      // There is some indexes to be removed from the result hotel list
       _.pullAt(resultHotels, indexesTobeDeleted)
     }
+    // Works
+    console.log('Result hotel', resultHotels)
 
 
     // Search by date from hotels rooms for eachroom if it's available at the required dates
@@ -62,56 +66,75 @@ class reservationSystem {
     for (let index = 0; index < duration; index++) {
       dates.push(moment(startDate).add(index, 'days').format('YYYY-MM-DD'))      
     }
+    console.log('Dates requested for this booking: ', dates)
 
     let roomsToBeDeleted = []
     resultHotels.forEach((hotel, indexH) => {
-      console.log('Cheking hotel ' + hotel.name)
-      const hotelRoomsListKeys = Object.keys(hotel.rooms)
-      let roomsToBeDeletedObj = {hotelName: hotel.name, hotelIndex: indexH, rooms: []}
-      for (const roomNumber of hotelRoomsListKeys) {
-        console.log('[' + hotel.name + '] Cheking room ' + roomNumber)
-        if (hotel.rooms[roomNumber] != null) {
-          const roomDatesKeys = Object.keys(hotel.rooms[roomNumber].reservations)
-          let roomDatesFormatted = []
-          for (const reservationDate of roomDatesKeys) {
-            // reservationDate is a string, so we first must convert it to a date obj.
-            roomDatesFormatted.push(moment(new Date(reservationDate)).format('YYYY-MM-DD'))
-          }          
-          dates.forEach(date => {
-            if (roomDatesFormatted.includes(date)) {
-              if (!roomsToBeDeleted.includes(roomNumber)) {
-                console.log('THIS ROOM (' + roomNumber + ') IS ALREADY BOOKED FOR THIS DATE')
-                roomsToBeDeletedObj.rooms.push(roomNumber)
-              }
-            }
-          })
-        }
-      }
+      console.log('Cheking hotel ' + hotel.name + ' for availables rooms')
 
-      roomsToBeDeletedObj.rooms = [...new Set(roomsToBeDeletedObj.rooms)] // Remove duplicates
+      let roomsToBeDeletedObj = {hotelName: hotel.name, hotelIndex: indexH, rooms: []}
+      hotel.rooms.forEach((roomObj, roomIndex) => {
+
+        console.log('[' + hotel.name + '] Cheking reservations for room ' + roomObj.roomId)
+
+        if (roomObj.hasOwnProperty('reservations')) {
+          // We will check if the reservations for this room are matching the requested dates
+          const roomReservationsDates = roomObj.reservations.map((reservation) => {
+            return reservation.date
+          })
+          console.log('This room is booked for the folllowing dates: ', roomReservationsDates)
+          console.log('Checking if requested dates are available for this room...')
+          const duplicatesDates = roomReservationsDates.some((val) => dates.indexOf(val) !== -1)
+          if (duplicatesDates) {
+            console.log('This room (' + roomObj.roomId + ') is already booked for the desired period')
+            if (!roomsToBeDeleted.includes(roomObj.roomId)) {
+              // Then we add this room number to the rooms to be deleted
+              roomsToBeDeletedObj.rooms.push(roomObj.roomId)
+            }
+          }
+        }
+      })
+      // We can now  add rooms for this hotel in the global var. of rooms to be deleted fom this search
       roomsToBeDeleted.push(roomsToBeDeletedObj)
     })
     // We can now delete unavailable rooms from our resultHotels variable
     roomsToBeDeleted.forEach((dHotel) => {
       // The following line is affectic the this.hotel object
-      resultHotels[dHotel.hotelIndex].rooms = _.omit(resultHotels[dHotel.hotelIndex].rooms, dHotel.rooms)
+      let roomIndexToBeDeleted = []
+      resultHotels[dHotel.hotelIndex].rooms.forEach(sRoom => {
+        dHotel.rooms.forEach((dRoom, dRoomIndex) => {
+          //console.log(dRoom)
+          if (sRoom.roomId == dRoom) {
+            // We add here the index of the room to be deleted
+            if(!roomIndexToBeDeleted.includes(dRoomIndex)) {
+              roomIndexToBeDeleted.push(dRoomIndex)
+            }
+          }
+        })
+      })
+      console.log('Removing unavaiblable room for hotel ' + dHotel.hotelName)
+      _.pullAt(resultHotels[dHotel.hotelIndex].rooms, roomIndexToBeDeleted) // Remove rooms by index
     })
 
 
-    // We now check if the hotel has the number of requested rooms available
+    // We now check if the hotel, with unavailable romms remove has still
+    // the number of requested rooms available
     // If not we delete the hotel from the result list
+    let indexHotelsToBeRemoved = []
     resultHotels.forEach((hotel, indexH) => {
-      const hotelRoomsListKeys = Object.keys(resultHotels[indexH].rooms)
-      if (hotelRoomsListKeys.length < roomsRequired) {
+      if (hotel.rooms.length < roomsRequired) {
         // This hotel doesn't have enough rooms for the reservation
-        delete resultHotels[indexH]
+        // We add the index of this hotel to remove it later
+        console.log('The hotel ' + dHotel.hotelName + ' doesn\'t have enough rooms for this reservation, deleting...')
+        indexHotelsToBeRemoved.push(indexH)
       }      
     })
+    _.pullAt(resultHotels, indexHotelsToBeRemoved)
 
     // Reconstruct the array (trim undefinded)
-    resultHotels = resultHotels.filter(function (el) {
-      return el != null
-    })
+    // resultHotels = resultHotels.filter(function (el) {
+    //   return el != null
+    // })
 
     // Build the response, return true/false, if true add the list of potentia hotels + rooms 
     if (resultHotels.length == 0) {

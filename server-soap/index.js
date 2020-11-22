@@ -1,12 +1,11 @@
 const soap = require('soap')
 const express = require('express')
 const bodyParser = require('body-parser')
-
 const { reservationSystem } = require("./reservationSystem")
-
 let RSI = new reservationSystem()
 
-
+let searchResult = RSI.search('2020-11-20', 2, 2)
+console.log('[server-soap]: test searchResult ', searchResult)
 
 
 let myService = {
@@ -23,12 +22,10 @@ let myService = {
           duration: Number(args.duration),
           numberOfRooms: Number(args.numberOfRooms)
         }
-        console.log(query)
+        console.log("Query received!", query)
         let searchResult = RSI.search(query.startDate, query.duration, query.numberOfRooms)
-        searchResult.query = query
-        const response = {...new Object(searchResult)}
-        console.log(response)
-        //return searchResult
+        console.log('[server-soap] / filter: searchResult ', searchResult)
+        
         return {
           query: query, 
           code: searchResult.code,
@@ -39,16 +36,17 @@ let myService = {
   }
 }
   
-let xml = require('fs').readFileSync('services.wsdl', 'utf8');
+let xml = require('fs').readFileSync('./server-soap/services.wsdl', 'utf8');
 
-let app = express();
+let app = express()
+const port = 8001
 
 app.use(bodyParser.raw({type: function(){return true;}, limit: '5mb'}))
-app.listen(8001, function(){
+app.listen(port, function(){
   //Note: /wsdl route will be handled by soap module
   //and all other routes & middleware will continue to work
   soap.listen(app, '/wsdl', myService, xml, function(){
-    console.log('server initialized')
+    console.log(`SOAP Server listening on port ${port}!`)
   });
   app.log = function(type, data) {
     console.log('[' + type + ']' + data)

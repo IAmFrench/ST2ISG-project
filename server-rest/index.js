@@ -12,10 +12,6 @@ function SOAP_filter(args, callback) {
   soap.createClient(url, (err, client) => {
     client.filter(args, (err, result) => {
       console.log('[server-rest / filter] SOAP response received:', result)
-
-      // parseString(result.arg1.body, function (err, result) {
-      //   console.dir(result)
-      // })
       callback(result)
     })
   })
@@ -34,5 +30,5 @@ app.get('/filter', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`REST Server listening at http://localhost:${port}`)
 })

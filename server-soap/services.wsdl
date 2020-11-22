@@ -19,8 +19,8 @@
    </message>
    <message name = "filterResponse">
       <part name = "code" type = "xsd:string"/>
-      <part name = "data"/>
-      <part name = "query"/>
+      <part name = "hotels"/>
+      <part name = "query" type = "xsd:string"/>
    </message>
    
    <portType name = "MyPort">
