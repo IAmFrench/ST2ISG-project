@@ -22,6 +22,18 @@
       <part name = "hotels"/>
       <part name = "query" type = "xsd:string"/>
    </message>
+
+   <message name = "bookRequest">
+      <part name = "hotelName" type = "xsd:string"/>
+      <part name = "startDate" type = "xsd:string"/>
+      <part name = "duration" type = "xsd:int"/>
+      <part name = "numberOfRooms" type = "xsd:int"/>
+   </message>
+   <message name = "bookResponse">
+      <part name = "code" type = "xsd:string"/>
+      <part name = "message"/>
+      <part name = "query" type = "xsd:string"/>
+   </message>
    
    <portType name = "MyPort">
       <operation name = "MyFunction">
@@ -31,6 +43,10 @@
       <operation name = "filter">
          <input message = "tns:filterRequest"/>
          <output message = "tns:filterResponse"/>
+      </operation>
+      <operation name = "book">
+         <input message = "tns:bookRequest"/>
+         <output message = "tns:bookResponse"/>
       </operation>
    </portType>
 
@@ -51,6 +67,15 @@
       </operation>
       <operation name = "filter">
          <soap:operation soapAction = "filter"/>
+         <input>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+         </input>
+         <output>
+            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
+         </output>
+      </operation>
+      <operation name = "book">
+         <soap:operation soapAction = "book"/>
          <input>
             <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
          </input>

@@ -206,7 +206,7 @@ class reservationSystem {
         // That means the hotelName wasn't found in the searchResult
         return {
           code: "failure",
-          data: "no hotel match your booking criterias"
+          data: `Reservation error: The hotel ${hotelName} doesn't have any free room`
         }
       }
     }
@@ -222,7 +222,10 @@ class reservationSystem {
       }
     })
     // We update "in-hard" (in file) rooms booking update for selected days
-
+    return {
+      code: "success",
+      data: "Reservation successful"
+    }
   }
 }
 exports.reservationSystem = reservationSystem;

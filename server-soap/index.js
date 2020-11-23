@@ -31,7 +31,24 @@ let myService = {
           code: searchResult.code,
           hotels: searchResult.data
         }
-      }
+      },
+      book: function(args) {
+        const query = {
+          hotelName: args.hotelName,
+          startDate: args.startDate,
+          duration: Number(args.duration),
+          numberOfRooms: Number(args.numberOfRooms)
+        }
+        console.log("Query received!", query)
+        let bookresult = RSI.book(query.hotelName, query.startDate, query.duration, query.numberOfRooms)
+        console.log('[server-soap] / book: bookresult ', bookresult)
+        
+        return {
+          query: query, 
+          code: bookresult.code,
+          message: bookresult.data
+        }
+      },
     }
   }
 }
