@@ -31,7 +31,7 @@ class reservationSystem {
       const hotelName = reservationsObj.reservations[reservationId].hotel
       const rooms = reservationsObj.reservations[reservationId].rooms
 
-      this.reservations.push(new reservation(reservationId, startDateString, duration, hotelName, rooms));
+      this.reservations.push(new reservation(reservationId, startDateString, duration, hotelName, rooms))
     }
   }
   search(startDate, duration = 1, roomsRequired = 1) {
@@ -166,7 +166,7 @@ class reservationSystem {
     if (resultHotels.length == 0) {
       return {
         code: "failure",
-        data: "hotel not found"
+        data: "No hotel match your criteria"
       }
     }
     return {
@@ -176,52 +176,75 @@ class reservationSystem {
   }
 
 
-  book(hotelName, startDate, duration = 1, roomsRequired = 1, selectedRooms = []) {
+  book(hotelName, startDate, duration = 1, roomsRequired = 1) {
     // We generate booking reservation dates
     let dates = []
     for (let index = 0; index < duration; index++) {
       dates.push(moment(startDate).add(index, 'days').format('YYYY-MM-DD'))     
     }
-
-    if (selectedRooms.length == 0) {
-      let searchResult = this.search(startDate, duration, roomsRequired)
-      if (searchResult.code == 'failure') {
-        // No hotel match selected criterias
-        return searchResult // aka the same response, failure
+    let searchResult = this.search(startDate, duration, roomsRequired)
+    if (searchResult.code == 'failure') {
+      // No hotel match selected criterias
+      return searchResult // aka the same response, failure
+    }
+    
+    // We must check that the hotel name is in the search results
+    // If yes, then we add required rooms to the selectedRooms var
+    let selectedRooms = []
+    searchResult.data.forEach((hotel, hotelKey) => {
+      if (hotel.name == hotelName) {
+        // This is the desired hotel
+        // We will now add the number of required rooms
+        for (let index = 0; index < roomsRequired; index++) {
+          console.log('Adding room No ' + hotel.rooms[index].roomId + ' to the selection')
+          selectedRooms.push(hotel.rooms[index].roomId)
+        }
       }
-
-      // We must check that the hotel name is in the search results
-      searchResult.data.forEach((hotel, hotelKey) => {
-        console.log(hotel.name, hotelKey)
-        if (hotel.name == hotelName) {
-          // This is the desired hotel
-          const hotelRoomsListKeys = Object.keys(hotel.rooms)
-          for (let index = 0; index < roomsRequired; index++) {
-            let roomNumber = hotelRoomsListKeys[index]
-            selectedRooms.push(roomNumber)
-          }
-        }
-      })
-      if (selectedRooms.length == 0) {
-        // That means the hotelName wasn't found in the searchResult
-        return {
-          code: "failure",
-          data: `Reservation error: The hotel ${hotelName} doesn't have any free room`
-        }
+    })
+    if (selectedRooms.length == 0) {
+      // That means the hotelName wasn't found in the searchResult
+      return {
+        code: "failure",
+        data: `Reservation error: The hotel ${hotelName} doesn't have any free room`
       }
     }
 
-
     // We update "in-memory" rooms booking for selected days
+    let newReservationId = 1
+    if (this.reservations.length > 0) {
+      newReservationId += this.reservations[this.reservations.length - 1].id
+    }
+
+    let roomReservations = []
+    dates.forEach((date) => {
+      roomReservations.push({
+        date: date,
+        reservationId: newReservationId
+      })
+    })
+
+    // We search for the mathcing hotel by name
     this.hotels.forEach((hotel, hotelKey) => {
       if (hotel.name == hotelName) {
-        selectedRooms.forEach(roomNumber => {
-          // We add a reservation number to the room number by a selected date
-          //hotel.rooms[roomNumber]
+        // This is the desired hotel
+        const roomsNumber = hotel.rooms.map((room, indexR) => {
+          return room.roomId
         })
+        selectedRooms.forEach((roomId) => {
+          let index = roomsNumber.indexOf(roomId)
+          hotel.rooms[index] = {
+            roomId: roomId,
+            reservations: roomReservations
+          }
+        })
+        this.reservations.push(new reservation(newReservationId, startDate, duration, hotelName, selectedRooms));
       }
     })
+
+
     // We update "in-hard" (in file) rooms booking update for selected days
+    // JSON to XML
+
     return {
       code: "success",
       data: "Reservation successful"
