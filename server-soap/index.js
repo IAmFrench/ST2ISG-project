@@ -3,11 +3,6 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const { reservationSystem } = require("./reservationSystem")
 let RSI = new reservationSystem()
-
-let searchResult = RSI.search('2020-11-20', 2, 2)
-console.log('[server-soap]: test searchResult ', searchResult)
-
-
 let myService = {
   hotelReservationSystem: {
     MyPort: {
@@ -51,22 +46,16 @@ let myService = {
       },
     }
   }
-}
-  
-let xml = require('fs').readFileSync('./server-soap/services.wsdl', 'utf8');
-
+}  
+let xml = require('fs').readFileSync('./server-soap/services.wsdl', 'utf8')
 let app = express()
 const port = 8001
-
 app.use(bodyParser.raw({type: function(){return true;}, limit: '5mb'}))
-app.listen(port, function(){
-  //Note: /wsdl route will be handled by soap module
-  //and all other routes & middleware will continue to work
+app.listen(port, function() {
   soap.listen(app, '/wsdl', myService, xml, function(){
     console.log(`SOAP Server listening on port ${port}!`)
-  });
+  })
   app.log = function(type, data) {
     console.log('[' + type + ']' + data)
-    // type is 'received' or 'replied'
   }
 })

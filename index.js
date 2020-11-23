@@ -3,8 +3,8 @@ const { reservationSystem } = require("./server-soap/reservationSystem")
 let RSI = new reservationSystem()
 
 
-//let searchResult = RSI.search("2020-11-20", 2, 2)
-//console.log(searchResult)
+let searchResult = RSI.search("2020-11-20", 2, 2)
+console.log(searchResult)
 
 let bookingResult = RSI.book("Econo Lodge", "2020-11-20", 2, 1)
 console.log(bookingResult)
