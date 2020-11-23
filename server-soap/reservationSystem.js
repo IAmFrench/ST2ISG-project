@@ -43,9 +43,6 @@ class reservationSystem {
     // })
     let resultHotels = []
     resultHotels = JSON.parse(JSON.stringify(this.hotels))
-    console.log('this', this.hotels)
-    console.log(resultHotels)
-    console.log('coucou')
 
 
 
@@ -148,16 +145,22 @@ class reservationSystem {
       if (hotel.rooms.length < roomsRequired) {
         // This hotel doesn't have enough rooms for the reservation
         // We add the index of this hotel to remove it later
-        console.log('The hotel ' + dHotel.hotelName + ' doesn\'t have enough rooms for this reservation, deleting...')
+        console.log('The hotel ' + hotel.hotelName + ' doesn\'t have enough rooms for this reservation, deleting...')
         indexHotelsToBeRemoved.push(indexH)
       }      
     })
     _.pullAt(resultHotels, indexHotelsToBeRemoved)
+    
 
-    // Reconstruct the array (trim undefinded)
-    // resultHotels = resultHotels.filter(function (el) {
-    //   return el != null
-    // })
+    // Remove "reservations" array from rooms
+    resultHotels.forEach((hotel, indexH) => {
+      hotel.rooms.forEach((room, indexR) => {
+        if (room.hasOwnProperty('reservations')) {
+          console.log('Removing reservations for room No ' + room.roomId)
+          resultHotels[indexH].rooms[indexR] = {roomId: room.roomId}
+        }
+      })
+    })
 
     // Build the response, return true/false, if true add the list of potentia hotels + rooms 
     if (resultHotels.length == 0) {
