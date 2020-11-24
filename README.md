@@ -45,15 +45,19 @@ Name: [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=
 Once you have openned the GitHub repository, you can create a codespaces instance by following this procedure :
 
 1. Click on the green buttun "Download Code"
+
 ![Open with Codespaces](./assets/github.com-open-with-codespaces.png)
 
 2. Then if you don't have any Codespace, use the "+ New Codespace" to launch a new instance
+
 ![New Codespaces](./assets/github.com-create-a-new-codespaces.png)
 
 3. Wait for the Codespace to instanciate (it should takes only a couples of seconds)
+
 ![New Codespaces](./assets/github.com-creating-codespaces.gif)
 
 4. You're all done, you can now start SOAP & REST servers and the REST Client (web rest client)
+
 ![GitHub Codespaces front page](./assets/github.com-codespaces-front-page.png)
 
 
@@ -63,11 +67,14 @@ Now it's time to start servers and the web rest client.
 > To do so, whether you are running this project in a container or using Codespaces the procedure is the same !
 
 1. Open the "Run tab" on the left of VS Code (or use the `Ctrl` + `Shift` + `D` shortcut)
+
 ![Open debuging pannel](./assets/github.com-codespaces-open-debugging-pannel.png)
 2. Then, at the top-left corner, select the desired server/client and click the green start button.
+
 ![Start/Run debugging servers and rest server](./assets/github.com-codespaces-start-debugging.gif)
 
 3. That's it !, you can check if servers and the rest client are running by checking the "Call stack" section (left panel on VS Code), You can use this section to pause, restart or stop any process.
+
 ![Call Stack, pause, restart or stop processes](./assets/github.com-codespaces-open-debugging-call-stack.gif)
 
 
@@ -77,12 +84,15 @@ It's now time to play with the WEB Gui, we have designed a special an minimalist
 > To do so, whether you are running this project in a container or using Codespaces the procedure is the same !
 
 1. Open the "Remote Explorer" tab from the left pannel of VS Code.
+
 ![Open Remote Explorer pannel](./assets/github.com-codespaces-open-remote-explorer-pannel.png)
 
 2. Under the "PORTS" pannel search for the 8080 forwarding rule, and click on the "Open in Browser" icon
+
 ![Click and open the web gui address](./assets/github.com-codespaces-remote-explorer-ports-section.png)
 
 3. That's it ! You will be automatically redirected to your Codespace instance or directly to localhost (if you're running this project using the Remove Containers plugin)
+
 ![Open the Web REST Client](./assets/github.com-codespaces-open-web-rest-client.gif)
 
 
@@ -93,21 +103,25 @@ The REST server will the forward and translate (JSON to XML) your request to the
 
 ### Search for available hotels
 > Using this web client, you can use the first form to search for available hotels depending a selected date, duration and the number of rooms required.
+
 ![Sample search using the REST Web client](./assets/restclient-search-request.gif)
 
 
 ### Book a room in a hotel
 > By using the second form, you can make a reservation and book room(s) at the desired hotel
+
 ![Sample booking using the REST Web Client](./assets/restclient-book-a-hotel.gif)
 
 
 ### Check if the booked rooms are available
 > Spoiler, they shouldn't be :)
+
 ![Sample search request after making a reservation](./assets/restclient-search-request-after-a-reservation.gif)
 
 
 ### Check if we can make twice the same reservation
 > Spoiler, we can't :)
+
 ![Saple booking request after a reservation was made](./assets/restclient-book-a-hotel-after-a-reservation.gif)
 
 
@@ -118,17 +132,20 @@ The REST server will the forward and translate (JSON to XML) your request to the
 ### Handling incoming request (GET/POST) from the REST Client
 The REST server must be able to answer to the REST Client.
 The REST client is making request using GET and POST method on 2 differents endpoints. This is the code responsible for the handling of the routes.
+
 ![REST Server, GET and POST routes](./assets/restserver-routes.png)
 
 
 ### Translating request and making SOAP request to the SOAP Server
 Now that the REST Server has catch the REST Client request, it must translate it to a SOAP request.
 To do so, we will create a SOAP Client and make the request, Here is a screeshot showing how we handle the request for the filter method using a soap client.
+
 ![REST Server, handling a request, a making a SOAP Request using a SOAP Client](./assets/restserver-soap-client-filter-method.png)
 
 > We can see in this screenshot how the REST server is reaching the SOAP server, by giving the SOAP Client the wsdl, it is able to validate and make the request to the desired server using ports and operators.
 
-Here is a sample request made using SOAP UI, a powerful software, SOAP and REST Client to play with SOAP and REST Servers
+Here is a sample request made using SOAP UI, a powerful software, SOAP and REST Client to play with SOAP and REST Servers.
+
 ![SOAP UI, Sample filter request](./assets/soapui-filter-request.png)
 
 1. The request, written in xml
