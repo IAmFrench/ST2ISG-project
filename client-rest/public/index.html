@@ -92,7 +92,7 @@
       let formBook = document.getElementById('book-form')
       formBook.addEventListener('submit', (event) => {
         event.preventDefault()
-        const target = "http://localhost:3000/book"
+        const target = endpoint + "/book"
         axios.post(target, { 
           hotelName: document.getElementById('book-hotelName').value,
           startDate: document.getElementById('book-startDate').value,
