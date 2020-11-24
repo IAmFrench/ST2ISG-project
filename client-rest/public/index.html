@@ -51,7 +51,7 @@
       const formFilter = document.getElementById('filter-form')
       formFilter.addEventListener('submit', (event) => {
         event.preventDefault()
-        const target = endpoint + "/filter"
+        let target = endpoint + "/filter"
         axios.get(target, { 
           params: { 
             startDate: document.getElementById('startDate').value,
@@ -92,13 +92,15 @@
       const formBook = document.getElementById('book-form')
       formBook.addEventListener('submit', (event) => {
         event.preventDefault()
-        const target = endpoint + "/book"
+        let target = endpoint + "/book"
         axios.post(target, { 
           hotelName: document.getElementById('book-hotelName').value,
           startDate: document.getElementById('book-startDate').value,
           duration: document.getElementById('book-duration').value || 1,
           numberOfRooms: document.getElementById('book-numberOfRooms').value || 1
-        } )
+        }, {
+          withCredentials: true
+        })
         .then(function (response) {
           console.log(response)
           document.getElementById('book-response').textContent = JSON.stringify(response.data, null, 2)
