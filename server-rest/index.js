@@ -52,6 +52,9 @@ app.post('/book', (req, res) => {
   })  
 })
 
+app.get('/', (req, res) => {
+  res.send("It works")
+})
 
 app.listen(port, () => {
   console.log(`REST Server listening at http://localhost:${port}`)

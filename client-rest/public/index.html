@@ -13,6 +13,7 @@
     <form id="endpoint-form">
       <label for="endpoint"></label>
       <input type="url" name="endpoint" id="endpoint" value='http://localhost:8080'>
+      <button type="button" id="get-codespaces-endpoint">Get codespaces endpoint</button>
       <button type="submit">Save</button>
     </form>
     <script>
@@ -22,6 +23,16 @@
         event.preventDefault()
         endpoint = document.getElementById('endpoint').value
         console.log('endpoint has changed !', endpoint)
+      })
+
+      let codespacesButton = document.getElementById('get-codespaces-endpoint')
+      codespacesButton.addEventListener('click', (event) => {
+        let res = axios.get('/endpoint').then(function (response) {
+          console.log(response.data)
+          endpoint = response.data
+          document.getElementById('endpoint').value = endpoint
+          console.log('endpoint has changed (using now codespaces)!', endpoint)
+        })
       })
     </script>
   </section>
