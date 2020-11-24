@@ -12,8 +12,7 @@
   <section>
     <form id="endpoint-form">
       <label for="endpoint"></label>
-      <input type="url" name="endpoint" id="endpoint" value='http://localhost:8080'>
-      <button type="button" id="get-codespaces-endpoint">Get codespaces endpoint</button>
+      <input type="url" name="endpoint" id="endpoint" value=''>
       <button type="submit">Save</button>
     </form>
     <script>
@@ -24,15 +23,16 @@
         endpoint = document.getElementById('endpoint').value
         console.log('endpoint has changed !', endpoint)
       })
-
-      let codespacesButton = document.getElementById('get-codespaces-endpoint')
-      codespacesButton.addEventListener('click', (event) => {
-        let res = axios.get('/endpoint').then(function (response) {
-          console.log(response.data)
-          endpoint = response.data
-          document.getElementById('endpoint').value = endpoint
-          console.log('endpoint has changed (using now codespaces)!', endpoint)
-        })
+      
+      // Autoload the correct rest server endpoint
+      let res = axios.get('/endpoint').then(function (response) {
+        console.log(response.data)
+        endpoint = response.data
+        document.getElementById('endpoint').value = endpoint
+        console.log('endpoint has changed !', endpoint)
+        if (!endpoint.includes('codespaces')) {
+          console.log("You're not running on codespaces")
+        }
       })
     </script>
   </section>
@@ -48,10 +48,10 @@
       <button type="submit">Submit</button>
     </form>
     <script>
-      let formFilter = document.getElementById('filter-form')
+      const formFilter = document.getElementById('filter-form')
       formFilter.addEventListener('submit', (event) => {
         event.preventDefault()
-        let target = endpoint + "/filter"
+        const target = endpoint + "/filter"
         axios.get(target, { 
           params: { 
             startDate: document.getElementById('startDate').value,
@@ -89,7 +89,7 @@
       <button type="submit">Submit</button>
     </form>
     <script>
-      let formBook = document.getElementById('book-form')
+      const formBook = document.getElementById('book-form')
       formBook.addEventListener('submit', (event) => {
         event.preventDefault()
         const target = endpoint + "/book"

@@ -4,13 +4,17 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const envId = process.env.CLOUDENV_ENVIRONMENT_ID
-console.log(envId)
-
+const runningInCodeSpace = !(typeof envId == 'undefined')
+let origin = "http://localhost:8080"
+if (runningInCodeSpace) {
+  origin = `https://${envId}-8080.apps.codespaces.githubusercontent.com`
+}
+console.log(`Using ${origin} as origin`)
 const port = 3000
 const app = express()
 app.use(cors({
   credentials: true,
-  origin: `https://${envId}-8080.apps.codespaces.githubusercontent.com`,
+  origin: origin,
 }))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
@@ -57,5 +61,9 @@ app.get('/', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`REST Server listening at http://localhost:${port}`)
+  if (runningInCodeSpace) {
+    console.log(`REST Server listening at https://${envId}-${port}.apps.codespaces.githubusercontent.com`)
+  } else{
+    console.log(`REST Server listening at http://localhost:${port}`)
+  }
 })

@@ -2,6 +2,8 @@ const soap = require('soap')
 const express = require('express')
 const bodyParser = require('body-parser')
 const { reservationSystem } = require("./reservationSystem")
+const envId = process.env.CLOUDENV_ENVIRONMENT_ID
+const runningInCodeSpace = !(typeof envId == 'undefined')
 let RSI = new reservationSystem()
 let myService = {
   hotelReservationSystem: {
@@ -48,7 +50,11 @@ const port = 8001
 app.use(bodyParser.raw({type: function(){return true;}, limit: '5mb'}))
 app.listen(port, function() {
   soap.listen(app, '/wsdl', myService, xml, function(){
-    console.log(`SOAP Server listening on port ${port}!`)
+    if (runningInCodeSpace) {
+      console.log(`SOAP server listening at https://${envId}-${port}.apps.codespaces.githubusercontent.com`)
+    } else{
+      console.log(`SOAP server listening at http://localhost:${port}`)
+    }
   })
   app.log = function(type, data) {
     console.log('[' + type + ']' + data)
