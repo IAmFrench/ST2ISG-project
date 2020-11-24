@@ -63,12 +63,12 @@
       formBook.addEventListener('submit', (event) => {
         event.preventDefault()
         const target = "http://localhost:3000/book"
-        axios.get(target, { params: { 
+        axios.post(target, { 
           hotelName: document.getElementById('book-hotelName').value,
           startDate: document.getElementById('book-startDate').value,
           duration: document.getElementById('book-duration').value || 1,
           numberOfRooms: document.getElementById('book-numberOfRooms').value || 1
-        } })
+        } )
         .then(function (response) {
           console.log(response)
           document.getElementById('book-response').textContent = JSON.stringify(response.data, null, 2)

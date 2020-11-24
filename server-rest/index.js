@@ -28,14 +28,16 @@ function SOAP_book(args, callback) {
 }
 const app = express()
 app.use(cors())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 const port = 3000
 app.get('/filter', (req, res) => {
   SOAP_filter(req.query, (response) => {
     res.send(response)
   })
 })
-app.get('/book', (req, res) => {
-  SOAP_book(req.query, (response) => {
+app.post('/book', (req, res) => {
+  SOAP_book(req.body, (response) => {
     res.send(response)
   })  
 })
