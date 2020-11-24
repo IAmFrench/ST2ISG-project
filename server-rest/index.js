@@ -4,6 +4,11 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 var url = 'http://localhost:8001/wsdl?wsdl'
+const port = 3000
+const app = express()
+app.use(cors())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
 function SOAP_filter(args, callback) {
   console.log('[server-rest / filter] starting SOAP Client')
@@ -26,11 +31,8 @@ function SOAP_book(args, callback) {
     })
   })
 }
-const app = express()
-app.use(cors())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-const port = 3000
+
+
 app.get('/filter', (req, res) => {
   SOAP_filter(req.query, (response) => {
     res.send(response)
@@ -41,6 +43,8 @@ app.post('/book', (req, res) => {
     res.send(response)
   })  
 })
+
+
 app.listen(port, () => {
   console.log(`REST Server listening at http://localhost:${port}`)
 })
