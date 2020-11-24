@@ -3,12 +3,14 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
-var url = 'http://localhost:8001/wsdl?wsdl'
 const port = 3000
 const app = express()
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
+
+
+var url = 'http://localhost:8001/wsdl?wsdl'
 
 function SOAP_filter(args, callback) {
   console.log('[server-rest / filter] starting SOAP Client')
