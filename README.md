@@ -29,7 +29,7 @@ Name: [Remote - Containers](https://marketplace.visualstudio.com/items?itemName=
 1. Open the project using Visual Studio Code, you will have at the bottom-right corner a notification asking you to open this same project under a Dev container, click on the "Reopen in a container" button.
 ![Open in a Dev Container](./assets/vscode-open-in-a-dev-container.png)
 
-2. That's it, the dev container will be buit, all nodeJS dependancies will be installed, and as soon as the VSCode client became response you will be able to play launch servers and the rest web client !
+2. That's it, the dev container will be built, all nodeJS dependancies will be installed, and as soon as the VSCode client became response you will be able to play launch servers and the rest web client !
 ![Start the Dev Container](./assets/vscode-building-the-dev-container.gif)
 
 
@@ -69,6 +69,7 @@ Now it's time to start servers and the web rest client.
 1. Open the "Run tab" on the left of VS Code (or use the `Ctrl` + `Shift` + `D` shortcut)
 
 ![Open debuging pannel](./assets/github.com-codespaces-open-debugging-pannel.png)
+
 2. Then, at the top-left corner, select the desired server/client and click the green start button.
 
 ![Start/Run debugging servers and rest server](./assets/github.com-codespaces-start-debugging.gif)
@@ -158,6 +159,27 @@ Here is a sample request made using SOAP UI, a powerful software, SOAP and REST 
 ### Handling the SOAP response
 After the request is made, the SOAP server send us a response, the response is catch by the `callback` method in the rest server.
 Here the callback is a function that sent the response to the `res` objet (it contain the response).
+
+
+## A quick overview of the SOAP Server
+
+
+### Exposing wsld and services
+The SOAP server must expose a WSLD xml file. This file contain services and methods availables.
+To do so, we have created by hand a wsdl file containing all our methods and port.
+Here is how we load this file and publish it.
+
+![SOAP Server, exposing wsdl and services](./assets/soapserver-routes.png)
+
+
+### Mapping services to nodeJS functions
+Now that we have exposed our services we must handle them. This is done by passing the `myService` object. let's deep dive into this object.
+
+![SOAP Server, binding wsdl and nodeJS functions](./assets/soapserver-myservice.png)
+
+We can seen in this file that services defined in the wsdl file are actually binded here in the myService object.
+
+Keys bind to a function that will handle request for the desired service (filter or book)
 
 
 ## Q&A
