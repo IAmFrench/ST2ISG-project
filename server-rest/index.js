@@ -3,9 +3,15 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+const envId = process.env.CLOUDENV_ENVIRONMENT_ID
+console.log(envId)
+
 const port = 3000
 const app = express()
-app.use(cors())
+app.use(cors({
+  credentials: true,
+  origin: `https://${envId}-8080.apps.codespaces.githubusercontent.com`,
+}))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
