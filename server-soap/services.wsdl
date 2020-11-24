@@ -53,18 +53,9 @@
 
 
 
-   <binding name = "MyFunction_Binding" type = "tns:MyPort">
+   <binding name = "ReservationSystem" type = "tns:MyPort">
       <soap:binding style = "rpc"
          transport = "http://schemas.xmlsoap.org/soap/http"/>
-      <operation name = "MyFunction">
-         <soap:operation soapAction = "MyFunction"/>
-         <input>
-            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
-         </input>
-         <output>
-            <soap:body encodingStyle = "http://schemas.xmlsoap.org/soap/encoding/" namespace = "urn:examples:MyService" use = "encoded"/>
-         </output>
-      </operation>
       <operation name = "filter">
          <soap:operation soapAction = "filter"/>
          <input>
@@ -87,7 +78,7 @@
 
    <service name = "hotelReservationSystem">
       <documentation>WSDL File for hotelReservationSystem</documentation>
-      <port binding = "tns:MyFunction_Binding" name = "MyPort">
+      <port binding = "tns:ReservationSystem" name = "MyPort">
          <soap:address
             location = "http://localhost:8001/wsdl/" />
       </port>

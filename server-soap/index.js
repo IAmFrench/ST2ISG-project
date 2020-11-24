@@ -6,11 +6,6 @@ let RSI = new reservationSystem()
 let myService = {
   hotelReservationSystem: {
     MyPort: {
-      MyFunction: function(args) {
-        return {
-          name: args.name
-        };
-      },
       filter: function(args) {
         const query = {
           startDate: args.startDate,
