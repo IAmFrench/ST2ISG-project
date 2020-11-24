@@ -60,10 +60,8 @@
           },
           withCredentials: true
         })
-        .then(function (response) {
-          console.log(response)
+          .then(function (response) {
           document.getElementById('filter-response').textContent = JSON.stringify(response.data, null, 2)
-
         })
       })
     </script>
