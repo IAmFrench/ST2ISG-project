@@ -3,7 +3,7 @@ const app = express()
 const port = 8080
 const envId = process.env.CLOUDENV_ENVIRONMENT_ID
 const runningInCodeSpace = !(typeof envId == 'undefined')
-let endpoint = "http://localhost:8080"
+let endpoint = "http://localhost:3000"
 if (runningInCodeSpace) {
   endpoint = `https://${envId}-3000.apps.codespaces.githubusercontent.com`
 }
