@@ -8,7 +8,34 @@
 </head>
 <body>
   <h1>Client REST (static)</h1>
-  <em>PARES / BRANCOLINI</em>  
+  <em>PARES / BRANCOLINI</em>
+  <section>
+    <form id="endpoint-form">
+      <label for="endpoint"></label>
+      <input type="url" name="endpoint" id="endpoint" value=''>
+      <button type="submit">Save</button>
+    </form>
+    <script>
+      let endpoint = document.getElementById('endpoint').value
+      let formEndpoint = document.getElementById('endpoint-form')
+      formEndpoint.addEventListener('submit', (event) => {
+        event.preventDefault()
+        endpoint = document.getElementById('endpoint').value
+        console.log('endpoint has changed !', endpoint)
+      })
+      
+      // Autoload the correct rest server endpoint
+      let res = axios.get('/endpoint').then(function (response) {
+        console.log(response.data)
+        endpoint = response.data
+        document.getElementById('endpoint').value = endpoint
+        console.log('endpoint has changed !', endpoint)
+        if (!endpoint.includes('codespaces')) {
+          console.log("You're not running on codespaces")
+        }
+      })
+    </script>
+  </section>
   <section>
     <h2>Search for available hotels</h2>
     <form id="filter-form">            
@@ -21,19 +48,20 @@
       <button type="submit">Submit</button>
     </form>
     <script>
-      let formFilter = document.getElementById('filter-form')
+      const formFilter = document.getElementById('filter-form')
       formFilter.addEventListener('submit', (event) => {
         event.preventDefault()
-        const target = "http://localhost:3000/filter"
-        axios.get(target, { params: { 
-          startDate: document.getElementById('startDate').value,
-          duration: document.getElementById('duration').value || 1,
-          numberOfRooms: document.getElementById('numberOfRooms').value || 1
-        } })
-        .then(function (response) {
-          console.log(response)
+        let target = endpoint + "/filter"
+        axios.get(target, { 
+          params: { 
+            startDate: document.getElementById('startDate').value,
+            duration: document.getElementById('duration').value || 1,
+            numberOfRooms: document.getElementById('numberOfRooms').value || 1
+          },
+          withCredentials: true
+        })
+          .then(function (response) {
           document.getElementById('filter-response').textContent = JSON.stringify(response.data, null, 2)
-
         })
       })
     </script>
@@ -59,16 +87,18 @@
       <button type="submit">Submit</button>
     </form>
     <script>
-      let formBook = document.getElementById('book-form')
+      const formBook = document.getElementById('book-form')
       formBook.addEventListener('submit', (event) => {
         event.preventDefault()
-        const target = "http://localhost:3000/book"
+        let target = endpoint + "/book"
         axios.post(target, { 
           hotelName: document.getElementById('book-hotelName').value,
           startDate: document.getElementById('book-startDate').value,
           duration: document.getElementById('book-duration').value || 1,
           numberOfRooms: document.getElementById('book-numberOfRooms').value || 1
-        } )
+        }, {
+          withCredentials: true
+        })
         .then(function (response) {
           console.log(response)
           document.getElementById('book-response').textContent = JSON.stringify(response.data, null, 2)
